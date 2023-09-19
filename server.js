@@ -10,3 +10,13 @@ const app = express();
 // Express middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// user input questions
+const mainQ = [
+    {
+        type: 'list',
+        name: 'toDo',
+        message: 'What would you like to do?',
+        choices: ['view all departments','view all roles','view all employees','add a department','add a role','add an employee','update an employee role']
+    }
+]
