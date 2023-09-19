@@ -30,6 +30,74 @@ const mainQ = [
         type: 'list',
         name: 'toDo',
         message: 'What would you like to do?',
-        choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
-    }
+        choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role'],
+    },
+];
+
+const addDepartmentQs = [
+    {
+        type: 'input',
+        name: 'departmentName',
+        message: 'Enter name of department:',
+    },
+];
+
+const addRoleQs = [
+    {
+        type: 'input',
+        name: 'roleName',
+        message: 'Enter name of role:',
+    },
+    {
+        type: 'input',
+        name: 'roleSalary',
+        message: 'Enter salary of role:',
+    },
+    {
+        type: 'list',
+        name: 'roleDepartment',
+        message: 'Select department of role:',
+        choices: [],
+    },
+];
+
+const addEmployeeQs = [
+    {
+        type: 'input',
+        name: 'employeeFirstName',
+        message: 'Enter employee first name:',
+    },
+    {
+        type: 'input',
+        name: 'employeeLastName',
+        message: 'Enter employee last name:',
+    },
+    {
+        type: 'list',
+        name: 'employeeRole',
+        message: 'Select employee role:',
+        choices: [],
+    },
+    {
+        type: 'list',
+        name: 'employeeManager',
+        message: 'Select employee manager:',
+        choices: [],
+    },
+];
+
+const updateEmployeeQs = [
+    {
+        type: 'list',
+        name: 'employeeSelect',
+        message: 'Select employee you would like to update:',
+        choices: [],
+    },
+    {
+        type: 'list',
+        name: 'employeeNewRole',
+        message: 'Select employee role',
+        choices: [],
+    },
 ]
+
