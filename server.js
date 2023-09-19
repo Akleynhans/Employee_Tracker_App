@@ -101,3 +101,78 @@ const updateEmployeeQs = [
     },
 ]
 
+// function to check answer
+function checkanswer(answer) {
+    if (answer.toDo === 'view all departments') {
+
+    }
+    if (answer.toDo === 'view all roles') {
+
+    }
+    if (answer.toDo === 'view all employees') {
+
+    }
+    if (answer.toDo === 'add a department') {
+
+        inquirer
+            .prompt(addDepartmentQs)
+            .then((answers) => {
+
+
+            });
+
+
+
+    }
+    if (answer.toDo === 'add a role') {
+
+        inquirer
+            .prompt(addRoleQs)
+            .then((answers) => {
+
+
+            });
+
+
+
+    }
+    if (answer.toDo === 'add an employee') {
+
+        inquirer
+            .prompt(addEmployeeQs)
+            .then((answers) => {
+
+
+            });
+
+
+
+    }
+    if (answer.toDo === 'update an employee role') {
+
+        inquirer
+            .prompt(updateEmployeeQs)
+            .then((answers) => {
+
+
+            });
+
+
+
+    }
+};
+
+// TODO: Create a function to initialize app
+function init() {
+    inquirer
+        .prompt(mainQ)
+        .then((answer) => {
+            checkanswer(answer);
+        });
+
+
+};
+
+
+// Function call to initialize app
+init();
