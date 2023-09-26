@@ -8,7 +8,8 @@ VALUES
     ("Software", 005),
     ("HR", 006);
 
-INSERT INTO roles (id, title, salary, department_id)
+INSERT INTO
+    roles (id, title, salary, department_id)
 VALUES
     (001, "Sales Rep", 80000, 001),
     (002, "Lead Engineer", 150000, 002),
@@ -20,13 +21,14 @@ VALUES
     (008, "Product Design", 95000, 004),
     (009, "HR Rep", 75000, 006);
 
-INSERT INTO employees (id, first_name, last_name, role_id)
+INSERT INTO
+    employees (id, first_name, last_name, role_id)
 VALUES
-(001, "Jim", "Smith", 002),
-(002, "Clark", "Kent", 005),
-(003, "Emily", "Baily", 001),
-(004, "Mikaela", "Moore", 008),
-(005, "Anna", "Kollmorgen", 008),
-(006, "Paige", "Husa", 005),
-(007, "Deon", "Williams", 007),
-(008, "Jane", "Shane", 009),
+    (001, "Jim", "Smith", 002),
+    (002, "Clark", "Kent", 005),
+    (003, "Emily", "Baily", 001),
+    (004, "Mikaela", "Moore", 008),
+    (005, "Anna", "Kollmorgen", 008),
+    (006, "Paige", "Husa", 005),
+    (007, "Deon", "Williams", 007),
+    (008, "Jane", "Shane", 009);

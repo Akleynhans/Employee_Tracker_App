@@ -17,11 +17,11 @@ const db = mysql.createConnection(
         host: 'localhost',
         // MySQL username,
         user: 'root',
-        // TODO: Add MySQL password here
-        password: 'Bigjuicy1!',
-        database: 'movies_db'
+        //MySQL password here
+        password: 'rootroot',
+        database: 'employee_db'
     },
-    console.log(`Connected to the movies_db database.`)
+    console.log(`Connected to the employee_db database.`)
 );
 
 // user input questions
@@ -104,13 +104,23 @@ const updateEmployeeQs = [
 // function to check answer
 function checkanswer(answer) {
     if (answer.toDo === 'view all departments') {
+        // Query database
+        db.query('SELECT * FROM departments', function (err, results) {
+            console.log(results);
+        });
 
     }
     if (answer.toDo === 'view all roles') {
-
+        // Query database
+        db.query('SELECT * FROM roles', function (err, results) {
+            console.log(results);
+        });
     }
     if (answer.toDo === 'view all employees') {
-
+        // Query database
+        db.query('SELECT * FROM employees', function (err, results) {
+            console.log(results);
+        });
     }
     if (answer.toDo === 'add a department') {
 
