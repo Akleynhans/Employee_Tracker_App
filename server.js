@@ -42,24 +42,24 @@ const addDepartmentQs = [
     },
 ];
 
-const addRoleQs = [
-    {
-        type: 'input',
-        name: 'roleName',
-        message: 'Enter name of role:',
-    },
-    {
-        type: 'input',
-        name: 'roleSalary',
-        message: 'Enter salary of role:',
-    },
-    {
-        type: 'list',
-        name: 'roleDepartment',
-        message: 'Select department of role:',
-        choices: [],
-    },
-];
+// const addRoleQs = [
+//     {
+//         type: 'input',
+//         name: 'roleName',
+//         message: 'Enter name of role:',
+//     },
+//     {
+//         type: 'input',
+//         name: 'roleSalary',
+//         message: 'Enter salary of role:',
+//     },
+//     {
+//         type: 'list',
+//         name: 'roleDepartment',
+//         message: 'Select department of role:',
+//         choices: listedDepartments,
+//     },
+// ];
 
 const addEmployeeQs = [
     {
@@ -140,19 +140,12 @@ function checkanswer(answer) {
                 })
             });
 
-            
+
 
     }
     if (answer.toDo === 'add a role') {
 
-        inquirer
-            .prompt(addRoleQs)
-            .then((answers) => {
-
-
-            });
-
-            init();
+        getDepartments();
 
     }
     if (answer.toDo === 'add an employee') {
@@ -164,7 +157,7 @@ function checkanswer(answer) {
 
             });
 
-            init();
+        init();
 
     }
     if (answer.toDo === 'update an employee role') {
@@ -176,7 +169,7 @@ function checkanswer(answer) {
 
             });
 
-            init();
+        init();
 
     }
 };
@@ -192,6 +185,52 @@ function init() {
 
 };
 
+function addRole(departments) {
+    inquirer
+        .prompt(
+            [
+                {
+                    type: 'input',
+                    name: 'title',
+                    message: 'Enter name of role:',
+                },
+                {
+                    type: 'input',
+                    name: 'salary',
+                    message: 'Enter salary of role:',
+                },
+                {
+                    type: 'list',
+                    name: 'department_id',
+                    message: 'Select department of role:',
+                    choices: departments,
+                },
+            ]
+        )
+        .then((answers) => {
+                db.query("INSERT INTO roles SET ?", answers, (err, results) => {
+                    if (err) throw err;
+                    console.log('New role has been added.');
+
+                    init();
+                })
+
+            });
+
+
+}
+
+function getDepartments() {
+    const sql = "SELECT id AS value, name FROM departments";
+
+    db.query(sql, (err, departments) => {
+        if (err) {
+            console.log(err)
+        }
+
+        addRole(departments);
+    })
+}
 
 // Function call to initialize app
 init();
