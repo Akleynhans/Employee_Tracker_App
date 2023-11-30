@@ -42,24 +42,6 @@ const addDepartmentQs = [
     },
 ];
 
-// const addRoleQs = [
-//     {
-//         type: 'input',
-//         name: 'roleName',
-//         message: 'Enter name of role:',
-//     },
-//     {
-//         type: 'input',
-//         name: 'roleSalary',
-//         message: 'Enter salary of role:',
-//     },
-//     {
-//         type: 'list',
-//         name: 'roleDepartment',
-//         message: 'Select department of role:',
-//         choices: listedDepartments,
-//     },
-// ];
 
 const addEmployeeQs = [
     {
@@ -132,7 +114,7 @@ function checkanswer(answer) {
             .prompt(addDepartmentQs)
             .then((answers) => {
 
-                db.query(`INSERT INTO departments (id, name) VALUES (11, '${answers.departmentName}')`, function (err, result) {
+                db.query(`INSERT INTO departments (name) VALUES ('${answers.departmentName}')`, function (err, result) {
                     if (err) throw err;
                     console.log('New department has been added.');
 
