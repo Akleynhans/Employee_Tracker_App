@@ -132,7 +132,7 @@ function checkanswer(answer) {
             .prompt(addDepartmentQs)
             .then((answers) => {
 
-                db.query(`INSERT INTO departments (id, name) VALUES (10, '${answers.departmentName}')`, function (err, result) {
+                db.query(`INSERT INTO departments (id, name) VALUES (11, '${answers.departmentName}')`, function (err, result) {
                     if (err) throw err;
                     console.log('New department has been added.');
 
