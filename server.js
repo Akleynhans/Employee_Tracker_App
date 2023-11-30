@@ -106,21 +106,25 @@ function checkanswer(answer) {
     if (answer.toDo === 'view all departments') {
         // Query database
         db.query('SELECT * FROM departments', function (err, results) {
-            console.log(results);
+            console.table(results);
         });
+
+        init();
 
     }
     if (answer.toDo === 'view all roles') {
         // Query database
         db.query('SELECT * FROM roles', function (err, results) {
-            console.log(results);
+            console.table(results);
         });
+        init();
     }
     if (answer.toDo === 'view all employees') {
         // Query database
         db.query('SELECT * FROM employees', function (err, results) {
-            console.log(results);
+            console.table(results);
         });
+        init();
     }
     if (answer.toDo === 'add a department') {
 
@@ -128,10 +132,15 @@ function checkanswer(answer) {
             .prompt(addDepartmentQs)
             .then((answers) => {
 
+                db.query(`INSERT INTO departments (id, name) VALUES (10, '${answers.departmentName}')`, function (err, result) {
+                    if (err) throw err;
+                    console.log('New department has been added.');
 
+                    init();
+                })
             });
 
-
+            
 
     }
     if (answer.toDo === 'add a role') {
@@ -143,7 +152,7 @@ function checkanswer(answer) {
 
             });
 
-
+            init();
 
     }
     if (answer.toDo === 'add an employee') {
@@ -155,7 +164,7 @@ function checkanswer(answer) {
 
             });
 
-
+            init();
 
     }
     if (answer.toDo === 'update an employee role') {
@@ -167,7 +176,7 @@ function checkanswer(answer) {
 
             });
 
-
+            init();
 
     }
 };
