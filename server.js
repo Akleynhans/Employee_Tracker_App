@@ -67,7 +67,7 @@ function checkanswer(answer) {
     }
     if (answer.toDo === 'view all employees') {
         // Query database
-        db.query('SELECT employees.id, employees.first_name, employees.last_name, employees.manager_id, roles.title, roles.salary, departments.name FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id', function (err, results) {
+        db.query('SELECT employees.id, employees.first_name, employees.last_name, employees.manager_name, roles.title, roles.salary, departments.name FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id', function (err, results) {
             console.table(results);
         });
         init();
@@ -152,17 +152,18 @@ function addRole(departments) {
 
 }
 
+// function to add employee to data
 function addEmployee() {
-
+// pull the roles for list options
     db.query("SELECT title AS value, id FROM roles", function (err, roles) {
         if (err) throw err;
-        console.log(roles.title);
+        // pull employees for manager options
         db.query("SELECT last_name AS value, id FROM employees", (err, managers) => {
             if (err) {
                 console.log(err)
             }
 
-            console.log(roles);
+         
             inquirer
                 .prompt(
                     [
@@ -184,13 +185,21 @@ function addEmployee() {
                         },
                         {
                             type: 'list',
-                            name: 'manager_id',
+                            name: 'manager_name',
                             message: 'Select employee manager:',
                             choices: managers,
                         },
                     ]
                 )
                 .then((answers) => {
+                    console.log(roles)
+                    // get role_id from selected role
+                    roles.find((o, i) => {
+                        if (o.value === answers.role_id) {
+                            answers.role_id = roles[i].id;
+                        }
+                    });
+
                     db.query("INSERT INTO employees SET ?", answers, (err, results) => {
                         if (err) throw err;
                         console.log('New employee has been added.');

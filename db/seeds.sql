@@ -22,11 +22,11 @@ VALUES
     ("HR Rep", 75000, 006);
 
 INSERT INTO
-    employees (first_name, last_name, role_id, manager_id)
+    employees (first_name, last_name, role_id, manager_name)
 VALUES
     ("Jim", "Smith", 002, NULL),
-    ("Clark", "Kent", 005, 1),
-    ("Emily", "Baily", 001, 1),
-    ("Mikaela", "Moore", 008, 1),
-    ("Anna", "Kollmorgen", 008, 1);
+    ("Clark", "Kent", 005, "Jim"),
+    ("Emily", "Baily", 001, "Jim"),
+    ("Mikaela", "Moore", 008, "Jim"),
+    ("Anna", "Kollmorgen", 008, "Jim");
 
