@@ -24,8 +24,6 @@ const db = mysql.createConnection(
     console.log(`Connected to the employee_db database.`)
 );
 
-// var roles = [];
-// var managers = [];
 
 // user input questions
 const mainQ = [
@@ -49,6 +47,7 @@ const addDepartmentQs = [
 
 // function to check answer and call resulting functions
 function checkanswer(answer) {
+    // show departments table
     if (answer.toDo === 'view all departments') {
         // Query database
         db.query('SELECT * FROM departments', function (err, results) {
@@ -58,6 +57,7 @@ function checkanswer(answer) {
         init();
 
     }
+    // show roles table
     if (answer.toDo === 'view all roles') {
         // Query database
         db.query('SELECT roles.id, roles.title, roles.salary, departments.name FROM roles LEFT JOIN departments ON roles.department_id = departments.id', function (err, results) {
@@ -65,6 +65,7 @@ function checkanswer(answer) {
         });
         init();
     }
+    // display employees table
     if (answer.toDo === 'view all employees') {
         // Query database
         db.query('SELECT employees.id, employees.first_name, employees.last_name, employees.manager_name, roles.title, roles.salary, departments.name FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id', function (err, results) {
@@ -72,12 +73,13 @@ function checkanswer(answer) {
         });
         init();
     }
+    // add department
     if (answer.toDo === 'add a department') {
 
         inquirer
             .prompt(addDepartmentQs)
             .then((answers) => {
-
+                // add new department into data
                 db.query(`INSERT INTO departments (name) VALUES ('${answers.departmentName}')`, function (err, result) {
                     if (err) throw err;
                     console.log('New department has been added.');
@@ -117,6 +119,7 @@ function init() {
 
 };
 
+// add new role
 function addRole(departments) {
     inquirer
         .prompt(
@@ -140,6 +143,7 @@ function addRole(departments) {
             ]
         )
         .then((answers) => {
+            // insert new deparment into data
             db.query("INSERT INTO roles SET ?", answers, (err, results) => {
                 if (err) throw err;
                 console.log('New role has been added.');
@@ -192,7 +196,7 @@ function addEmployee() {
                     ]
                 )
                 .then((answers) => {
-                    console.log(roles)
+                    
                     // get role_id from selected role
                     roles.find((o, i) => {
                         if (o.value === answers.role_id) {
@@ -214,6 +218,7 @@ function addEmployee() {
 
 }
 
+// pull department names from data
 function getDepartments() {
     const sql = "SELECT id AS value, name FROM departments";
 
@@ -226,11 +231,13 @@ function getDepartments() {
     })
 }
 
+// update employee role
 function updateEmployeeRole() {
 
     db.query('SELECT * FROM employees', (err, result) => {
 
         if (err) throw (err);
+        // select employee to edit
         inquirer.prompt([
 
             {
@@ -253,6 +260,7 @@ function updateEmployeeRole() {
                 // create list to select new role
                 db.query("SELECT * FROM roles", function (err, res) {
                     inquirer
+                    // select new role for employee
                         .prompt([
                             {
                                 name: "role",
@@ -275,6 +283,7 @@ function updateEmployeeRole() {
                                 let roleId = res[0].id;
                                 let values = [parseInt(roleId), name]
 
+                                // update role for the employee
                                 db.query('UPDATE employees SET role_Id = ? WHERE last_name = ?', values,
                                     function (err, res, fields) {
                                         console.log(`Successfully updated role`);
