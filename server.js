@@ -47,22 +47,7 @@ const addDepartmentQs = [
 
 
 
-const updateEmployeeQs = [
-    {
-        type: 'list',
-        name: 'employeeSelect',
-        message: 'Select employee you would like to update:',
-        choices: [],
-    },
-    {
-        type: 'list',
-        name: 'employeeNewRole',
-        message: 'Select employee role',
-        choices: [],
-    },
-]
-
-// function to check answer
+// function to check answer and call resulting functions
 function checkanswer(answer) {
     if (answer.toDo === 'view all departments') {
         // Query database
@@ -75,14 +60,14 @@ function checkanswer(answer) {
     }
     if (answer.toDo === 'view all roles') {
         // Query database
-        db.query('SELECT * FROM roles', function (err, results) {
+        db.query('SELECT roles.id, roles.title, roles.salary, departments.name FROM roles LEFT JOIN departments ON roles.department_id = departments.id', function (err, results) {
             console.table(results);
         });
         init();
     }
     if (answer.toDo === 'view all employees') {
         // Query database
-        db.query('SELECT * FROM employees', function (err, results) {
+        db.query('SELECT employees.id, employees.first_name, employees.last_name, employees.manager_id, roles.title, roles.salary, departments.name FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id', function (err, results) {
             console.table(results);
         });
         init();
@@ -116,14 +101,7 @@ function checkanswer(answer) {
     }
     if (answer.toDo === 'update an employee role') {
 
-        inquirer
-            .prompt(updateEmployeeQs)
-            .then((answers) => {
-
-
-            });
-
-        init();
+        updateEmployeeRole();
 
     }
 };
@@ -239,8 +217,70 @@ function getDepartments() {
     })
 }
 
+function updateEmployeeRole() {
+
+    db.query('SELECT * FROM employees', (err, result) => {
+
+        if (err) throw (err);
+        inquirer.prompt([
+
+            {
+                type: 'list',
+                name: 'employeeSelect',
+                message: 'Select employee you would like to update:',
+                choices: function () {
+                    const employeeList = [];
+                    result.forEach(({ last_name }) => {
+                        employeeList.push(last_name);
+                    });
+                    return employeeList;
+                }
+            },
+        ])
+
+            .then(function (answer) {
+                const name = answer.employeeSelect;
+
+                // create list to select new role
+                db.query("SELECT * FROM roles", function (err, res) {
+                    inquirer
+                        .prompt([
+                            {
+                                name: "role",
+                                type: "list",
+                                message: "Select new role:",
+                                choices: function () {
+                                    var roleList = [];
+                                    res.forEach(res => {
+                                        roleList.push(
+                                            res.title)
+                                    })
+                                    return roleList;
+                                }
+                            }
+                        ]).then(function (selectedRole) {
+                            const role = selectedRole.role;
+                            // pull data for new selected role
+                            db.query('SELECT * FROM roles WHERE title = ?', [role], function (err, res) {
+                                if (err) throw (err);
+                                let roleId = res[0].id;
+                                let values = [parseInt(roleId), name]
+
+                                db.query('UPDATE employees SET role_Id = ? WHERE last_name = ?', values,
+                                    function (err, res, fields) {
+                                        console.log(`Successfully updated role`);
+                                        init();
+                                    })
+                            })
+                        })
+                })
 
 
+
+
+            })
+    })
+}
 
 // Function call to initialize app
 init();
