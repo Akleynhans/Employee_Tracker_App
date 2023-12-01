@@ -24,6 +24,9 @@ const db = mysql.createConnection(
     console.log(`Connected to the employee_db database.`)
 );
 
+// var roles = [];
+// var managers = [];
+
 // user input questions
 const mainQ = [
     {
@@ -43,30 +46,6 @@ const addDepartmentQs = [
 ];
 
 
-const addEmployeeQs = [
-    {
-        type: 'input',
-        name: 'employeeFirstName',
-        message: 'Enter employee first name:',
-    },
-    {
-        type: 'input',
-        name: 'employeeLastName',
-        message: 'Enter employee last name:',
-    },
-    {
-        type: 'list',
-        name: 'employeeRole',
-        message: 'Select employee role:',
-        choices: [],
-    },
-    {
-        type: 'list',
-        name: 'employeeManager',
-        message: 'Select employee manager:',
-        choices: [],
-    },
-];
 
 const updateEmployeeQs = [
     {
@@ -132,14 +111,7 @@ function checkanswer(answer) {
     }
     if (answer.toDo === 'add an employee') {
 
-        inquirer
-            .prompt(addEmployeeQs)
-            .then((answers) => {
-
-
-            });
-
-        init();
+        addEmployee();
 
     }
     if (answer.toDo === 'update an employee role') {
@@ -156,7 +128,7 @@ function checkanswer(answer) {
     }
 };
 
-// TODO: Create a function to initialize app
+//function to initialize app
 function init() {
     inquirer
         .prompt(mainQ)
@@ -190,14 +162,67 @@ function addRole(departments) {
             ]
         )
         .then((answers) => {
-                db.query("INSERT INTO roles SET ?", answers, (err, results) => {
-                    if (err) throw err;
-                    console.log('New role has been added.');
+            db.query("INSERT INTO roles SET ?", answers, (err, results) => {
+                if (err) throw err;
+                console.log('New role has been added.');
 
-                    init();
-                })
+                init();
+            })
 
-            });
+        });
+
+
+}
+
+function addEmployee() {
+
+    db.query("SELECT title AS value, id FROM roles", function (err, roles) {
+        if (err) throw err;
+        console.log(roles.title);
+        db.query("SELECT last_name AS value, id FROM employees", (err, managers) => {
+            if (err) {
+                console.log(err)
+            }
+
+            console.log(roles);
+            inquirer
+                .prompt(
+                    [
+                        {
+                            type: 'input',
+                            name: 'first_name',
+                            message: 'Enter employee first name:',
+                        },
+                        {
+                            type: 'input',
+                            name: 'last_name',
+                            message: 'Enter employee last name:',
+                        },
+                        {
+                            type: 'list',
+                            name: 'role_id',
+                            message: 'Select employee role:',
+                            choices: roles,
+                        },
+                        {
+                            type: 'list',
+                            name: 'manager_id',
+                            message: 'Select employee manager:',
+                            choices: managers,
+                        },
+                    ]
+                )
+                .then((answers) => {
+                    db.query("INSERT INTO employees SET ?", answers, (err, results) => {
+                        if (err) throw err;
+                        console.log('New employee has been added.');
+
+                        init();
+                    })
+
+                });
+        })
+    })
 
 
 }
@@ -213,6 +238,9 @@ function getDepartments() {
         addRole(departments);
     })
 }
+
+
+
 
 // Function call to initialize app
 init();
